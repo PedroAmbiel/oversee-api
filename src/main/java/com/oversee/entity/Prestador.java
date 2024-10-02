@@ -6,18 +6,20 @@ import io.quarkus.security.jpa.Password;
 import io.quarkus.security.jpa.Username;
 import jakarta.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Table(name = "prestadores", schema = "quarkus")
+@Table(name = "prestadores", schema = "oversee-adm")
 public class Prestador extends PanacheEntity {
 
-    @Column
+    @Column(nullable = false)
     private String nome;
 
-    @Column(name = "data_nascimento")
+    @Column(name = "data_nascimento", nullable = false)
     private LocalDate dataNascimento;
 
-    @Column
+    @Column(nullable = false)
     @Username
     private String cpf;
 
@@ -27,12 +29,15 @@ public class Prestador extends PanacheEntity {
     @Column
     private String telefone;
 
-    @Column
+    @Column(nullable = false)
     private String sobrenome;
 
-    @Column
+    @Column(nullable = false)
     @Password
     private String senha;
+
+    @OneToMany(mappedBy = "prestador", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Cliente> clientes = new ArrayList<>();
 
     public Prestador(String nome, String cpf, String email, LocalDate dataNascimento, String telefone, String sobrenome, String senha) {
         this.nome = nome;
@@ -106,5 +111,13 @@ public class Prestador extends PanacheEntity {
 
     public void setSenha(String senha) {
         this.senha = senha;
+    }
+
+    public List<Cliente> getClientes() {
+        return clientes;
+    }
+
+    public void setClientes(List<Cliente> clientes) {
+        this.clientes = clientes;
     }
 }

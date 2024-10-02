@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "clientes", schema = "quarkus")
+@Table(name = "clientes", schema = "oversee")
 public class Cliente extends PanacheEntity {
 
     @Column(nullable = false)
@@ -19,6 +19,10 @@ public class Cliente extends PanacheEntity {
 
     @Column(nullable = false)
     private String rg;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "fk_prestador", nullable = false)
+    private Prestador prestador;
 
     public Cliente() {
 
@@ -36,11 +40,12 @@ public class Cliente extends PanacheEntity {
     }
 
 
-    public Cliente(String nome, LocalDate dataNascimento, String cpf, String rg) {
+    public Cliente(String nome, LocalDate dataNascimento, String cpf, String rg, Prestador prestador) {
         this.nome = nome;
         this.dataNascimento = dataNascimento;
         this.cpf = cpf;
         this.rg = rg;
+        this.prestador = prestador;
     }
 
     public Long getId() {
@@ -77,5 +82,13 @@ public class Cliente extends PanacheEntity {
 
     public void setRg(String rg) {
         this.rg = rg;
+    }
+
+    public Prestador getPrestador() {
+        return prestador;
+    }
+
+    public void setPrestador(Prestador prestador) {
+        this.prestador = prestador;
     }
 }
