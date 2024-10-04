@@ -36,9 +36,6 @@ public class Prestador extends PanacheEntity {
     @Password
     private String senha;
 
-    @OneToMany(mappedBy = "prestador", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Cliente> clientes = new ArrayList<>();
-
     public Prestador(String nome, String cpf, String email, LocalDate dataNascimento, String telefone, String sobrenome, String senha) {
         this.nome = nome;
         this.cpf = cpf;
@@ -113,11 +110,4 @@ public class Prestador extends PanacheEntity {
         this.senha = senha;
     }
 
-    public List<Cliente> getClientes() {
-        return clientes;
-    }
-
-    public void setClientes(List<Cliente> clientes) {
-        this.clientes = clientes;
-    }
 }

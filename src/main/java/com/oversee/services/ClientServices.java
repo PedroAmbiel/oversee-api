@@ -14,20 +14,18 @@ import java.util.List;
 
 @Path("/cliente")
 public class ClientServices {
-
-    Parceiro server = Cliente.iniciarConexao();
     
     @Inject
     ClienteRN clienteRN;
 
-    @GET
+    /*@GET
     @Path("/server")
     public Response serverConnection() throws Exception {
         server.receba(new PedidoDeOperacao('+', 10));
         return Response.ok("Conta realizada com sucesso").build();
-    }
+    }*/
 
-    @GET
+    /*@GET
     @Path("/receba")
     public String receberServer() throws Exception {
         double valor = 0;
@@ -42,13 +40,30 @@ public class ClientServices {
         valor = resultado.getValorResultante();
         System.out.println ("Resultado atual: "+resultado.getValorResultante()+"\n");
         return String.valueOf(valor);
-    }
+    }*/
 
 
     @POST
     @Path("/novo")
-    @Consumes
-    public Response criarNovoCliente(ClienteDTO cliente) {
+    @Produces
+    public Response criarNovoCliente(ClienteDTO cliente) throws Exception {
+        Parceiro servidor = Cliente.iniciarConexao();
+
+        if(servidor != null){//Validar o CPF informado
+            servidor.receba(new PedidoDeValidacaoCpfCnpj(cliente.getCpf()));
+            Comunicado comunicado = null;
+            do
+            {
+                comunicado = (Comunicado)servidor.espie();
+            }
+            while (!(comunicado instanceof Validado));
+            Validado resultadoLogin = (Validado)servidor.envie();
+            if(!resultadoLogin.isValidado()) return Response.status(Response.Status.BAD_REQUEST).entity("CPF inválido").build();
+            servidor.adeus();//Finaliza conexão com o servidor
+        }else{
+            return Response.status(Response.Status.BAD_REQUEST).entity("Servidor indisponível, tente mais tarde").build();
+        }
+
         try{
             if(clienteRN.novoCliente(cliente)){
                 return Response.ok("Cliente Cadastrado").build();
