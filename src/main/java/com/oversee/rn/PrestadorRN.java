@@ -17,7 +17,7 @@ import java.util.Optional;
 public class PrestadorRN {
 
     @Transactional
-    public Boolean criarNovoPrestador(PrestadorDTO prestador) {
+    public Long criarNovoPrestador(PrestadorDTO prestador) {
         if(prestador.getCpf() != null && !prestadorJaCadastrado(prestador.getCpf())){ //Prestador precisa ter cpf e não pode já estar cadastrado
             Prestador novoPrestador = new Prestador(
                     prestador.getNome(),
@@ -28,10 +28,10 @@ public class PrestadorRN {
                     prestador.getSobrenome(),
                     prestador.getSenha()
             );
-            novoPrestador.persist();
-            return true;
+            novoPrestador.persistAndFlush();
+            return novoPrestador.id;
         }
-        return false;
+        return null;
     }
 
     @Transactional

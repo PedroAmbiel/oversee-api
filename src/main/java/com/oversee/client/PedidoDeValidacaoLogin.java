@@ -11,14 +11,11 @@ public class PedidoDeValidacaoLogin extends Comunicado{
         this.senha = senha;
     }
 
-    public static boolean validarLogin(PedidoDeValidacaoLogin pedidoDeValidacaoLogin) {
+    public static Validado validarLogin(PedidoDeValidacaoLogin pedidoDeValidacaoLogin) {
         if(!pedidoDeValidacaoLogin.getSenha().matches("^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[\\W_]).+$")){
-            return false;
-        }else if(!PedidoDeValidacaoCpfCnpj.validarCpfCnpj(new PedidoDeValidacaoCpfCnpj(pedidoDeValidacaoLogin.getLogin()))){
-            return false;
-        }else{
-            return true;
-        }
+            return new Validado(false, "Senha não atende aos requisitos mínimos");
+        }else
+            return PedidoDeValidacaoCpfCnpj.validarCpfCnpj(new PedidoDeValidacaoCpfCnpj(pedidoDeValidacaoLogin.getLogin()));
     }
 
     public String getLogin() {

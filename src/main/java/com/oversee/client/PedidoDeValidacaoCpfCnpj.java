@@ -8,7 +8,7 @@ public class PedidoDeValidacaoCpfCnpj extends Comunicado {
         this.documento = documento;
     }
 
-    public static boolean validarCpfCnpj(PedidoDeValidacaoCpfCnpj documento) {
+    public static Validado validarCpfCnpj(PedidoDeValidacaoCpfCnpj documento) {
 
         if(documento.getDocumento().length() == 11){
             // Remove caracteres não numéricos
@@ -16,7 +16,7 @@ public class PedidoDeValidacaoCpfCnpj extends Comunicado {
 
             // Verifica se o CPF tem 11 dígitos ou é uma sequência de números repetidos
             if (documento.getDocumento().matches("(\\d)\\1{10}")) {
-                return false;
+                return new Validado(false, "Número de CPF inválido");
             }
 
             // Calcula o primeiro dígito verificador
@@ -31,7 +31,7 @@ public class PedidoDeValidacaoCpfCnpj extends Comunicado {
 
             // Verifica o primeiro dígito
             if (primeiroDigitoVerificador != (documento.getDocumento().charAt(9) - '0')) {
-                return false;
+                return new Validado(false, "Número de CPF inválido");
             }
 
             // Calcula o segundo dígito verificador
@@ -45,8 +45,11 @@ public class PedidoDeValidacaoCpfCnpj extends Comunicado {
             }
 
             // Verifica o segundo dígito
-            return segundoDigitoVerificador == (documento.getDocumento().charAt(10) - '0');
+            if (segundoDigitoVerificador != (documento.getDocumento().charAt(10) - '0')){
+                return new Validado(false, "Número de CPF inválido");
+            }
 
+            return new Validado(true, "CPF válido");
 
             //Valida CNPJ
         }else if(documento.getDocumento().length() == 14){
@@ -54,7 +57,7 @@ public class PedidoDeValidacaoCpfCnpj extends Comunicado {
 
             // Verifica se o CNPJ tem 14 dígitos ou é uma sequência de números repetidos
             if (documento.getDocumento().matches("(\\d)\\1{13}")) {
-                return false;
+                return new Validado(false, "Número de CNPJ inválido");
             }
 
             // Arrays de multiplicadores para o cálculo dos dígitos verificadores
@@ -73,7 +76,7 @@ public class PedidoDeValidacaoCpfCnpj extends Comunicado {
 
             // Verifica o primeiro dígito
             if (primeiroDigitoVerificador != (documento.getDocumento().charAt(12) - '0')) {
-                return false;
+                return new Validado(false, "Número de CNPJ inválido");
             }
 
             // Calcula o segundo dígito verificador
@@ -87,11 +90,15 @@ public class PedidoDeValidacaoCpfCnpj extends Comunicado {
             }
 
             // Verifica o segundo dígito
-            return segundoDigitoVerificador == (documento.getDocumento().charAt(13) - '0');
+            if(segundoDigitoVerificador != (documento.getDocumento().charAt(13) - '0')){
+                return new Validado(false,"Número de CNPJ inválido");
+            }
 
         }else{
-            return false;
+            return new Validado(false, "Número de documento inválido");
         }
+
+        return null;
     }
 
 

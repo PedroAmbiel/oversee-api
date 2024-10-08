@@ -9,13 +9,15 @@ public class PedidoDeValidacaoEstado extends Comunicado{
         this.estado = estado;
     }
 
-    public static boolean verificarEstado(String estado){
-        for(String item : Dicionarios.ESTADOS){
-            if(item.equals(estado.toUpperCase())){
-                return true;
+    public static Validado verificarEstado(String estado){
+        if(estado.length() == 2){
+            for(String item : Dicionarios.ESTADOS){
+                if(item.equals(estado.toUpperCase())){
+                    return new Validado(true, "Estado válido");
+                }
             }
         }
-        return false;
+        return new Validado(false, "Informe a sigla de um estado válido");
     }
 
     public String getEstado() {

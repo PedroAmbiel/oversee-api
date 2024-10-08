@@ -20,6 +20,7 @@ public class PrestadorServices {
     @Inject
     EmpresaRN empresaRN;
 
+    /*Criar novo prestador*/
     @POST
     @Path("/criar")
     @Consumes
@@ -38,20 +39,22 @@ public class PrestadorServices {
             }
             while (!(comunicado instanceof Validado));
             Validado resultadoLogin = (Validado)servidor.envie();
-            if(!resultadoLogin.isValidado()) return Response.status(Response.Status.BAD_REQUEST).entity("CPF ou Senha inválida").build();
+            if(!resultadoLogin.isValidado()) return Response.status(Response.Status.BAD_REQUEST).entity(resultadoLogin.getMensagem()).build();
             servidor.adeus();//Finaliza conexão com o servidor
         }else{
             return Response.status(Response.Status.BAD_REQUEST).entity("Servidor indisponível, tente mais tarde").build();
         }
 
-        if (prestadorRN.criarNovoPrestador(dto))
-            response = Response.ok("Criado com sucesso").build();
+        Long idNovoPrestador = prestadorRN.criarNovoPrestador(dto);
+        if (idNovoPrestador != null)
+            response = Response.ok(idNovoPrestador).build();
         else
-            response = Response.status(Response.Status.BAD_REQUEST).entity("Prestador já cadastrado").build();
+            response = Response.status(Response.Status.BAD_REQUEST).entity("Prestador com CPF já cadastrado").build();
 
         return response;
     }
 
+    /*Busca o prestador por ID*/
     @GET
     @Path("/buscar")
     @Produces
@@ -67,7 +70,6 @@ public class PrestadorServices {
 
     @POST
     @Path("/login")
-    @Produces
     public Response login(LoginDTO login) {
         //Parceiro servidor = Cliente.iniciarConexao();
 
@@ -95,6 +97,7 @@ public class PrestadorServices {
             return Response.status(Response.Status.UNAUTHORIZED).entity("Usuário ou senha incorretos").build();
         }
     }
+
     @GET
     @Path("/buscarempresa")
     public Response verificarEmpresaPrestador(@QueryParam("idPrestador") Integer idPrestador){

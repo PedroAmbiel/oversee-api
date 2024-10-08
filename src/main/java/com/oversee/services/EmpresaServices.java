@@ -33,7 +33,7 @@ public class EmpresaServices {
             }while(!(comunicado instanceof Validado));
             resultado = (Validado) servidor.envie();
             if(!resultado.isValidado()){
-                return Response.status(Response.Status.BAD_REQUEST).entity("Cnpj Inválido").build();
+                return Response.status(Response.Status.BAD_REQUEST).entity(resultado.getMensagem()).build();
             }
 
             //Pedido pro servidor para validar a sigla de Estado
@@ -43,7 +43,7 @@ public class EmpresaServices {
             }while(!(comunicado instanceof Validado));
             resultado = (Validado) servidor.envie();
             if(!resultado.isValidado()){
-                return Response.status(Response.Status.BAD_REQUEST).entity("Cnpj Inválido").build();
+                return Response.status(Response.Status.BAD_REQUEST).entity(resultado.getMensagem()).build();
             }
         }else{
             return Response.status(Response.Status.BAD_REQUEST).entity("Servidor indisponível, tente mais tarde").build();
