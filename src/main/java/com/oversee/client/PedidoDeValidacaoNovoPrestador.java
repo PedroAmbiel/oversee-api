@@ -13,11 +13,14 @@ public class PedidoDeValidacaoNovoPrestador extends Comunicado {
     }
 
     public static Validado validarNovoPrestador(PedidoDeValidacaoNovoPrestador novoPrestador) {
-        Validado pedido = PedidoDeValidacaoLogin.validarLogin(new PedidoDeValidacaoLogin(novoPrestador.getCpf(), novoPrestador.getSenha()));
-        if(!pedido.isValidado()) {//Valida CPF e Senha
-            return pedido;
-        }else if(!novoPrestador.getEmail().matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")) {//Email inválido sem @ ou .com ou outro .algo
-            return new Validado(false, "Informe um email válido");
+        Validado pedidoLogin = PedidoDeValidacaoLogin.validarLogin(new PedidoDeValidacaoLogin(novoPrestador.getCpf(), novoPrestador.getSenha()));
+        Validado pedidoEmail = PedidoDeValidacaoEmail.validarEmail(new PedidoDeValidacaoEmail(novoPrestador.getEmail()));
+
+
+        if(!pedidoLogin.isValidado()) {//Valida CPF e Senha
+            return pedidoLogin;
+        }else if(!pedidoEmail.isValidado()) {//Email inválido sem @ ou .com ou outro .algo
+            return pedidoEmail;
         }
         return new Validado(true, "Prestador válido");
     }

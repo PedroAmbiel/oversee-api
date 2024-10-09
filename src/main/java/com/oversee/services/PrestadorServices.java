@@ -98,13 +98,15 @@ public class PrestadorServices {
         }
     }
 
+    /*Busca a empresa cadastrada do prestador pelo ID do mesmo*/
     @GET
     @Path("/buscarempresa")
-    public Response verificarEmpresaPrestador(@QueryParam("idPrestador") Integer idPrestador){
+    public Response verificarEmpresaPrestador(@QueryParam("idPrestador") Integer idPrestador) {
         EmpresaDTO empresa = empresaRN.buscarEmpresaPorPrestador(idPrestador);
         if (empresa != null)
             return Response.ok(empresa).build();
         else
             return Response.status(Response.Status.NOT_FOUND).entity("Prestador não possui empresa cadastrada").build();
     }
+
 }

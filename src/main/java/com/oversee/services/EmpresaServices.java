@@ -35,9 +35,17 @@ public class EmpresaServices {
             if(!resultado.isValidado()){
                 return Response.status(Response.Status.BAD_REQUEST).entity(resultado.getMensagem()).build();
             }
-
             //Pedido pro servidor para validar a sigla de Estado
             servidor.receba(new PedidoDeValidacaoEstado(empresaDTO.getEndereco().getEstado()));
+            do{
+                comunicado = servidor.espie();
+            }while(!(comunicado instanceof Validado));
+            resultado = (Validado) servidor.envie();
+            if(!resultado.isValidado()){
+                return Response.status(Response.Status.BAD_REQUEST).entity(resultado.getMensagem()).build();
+            }
+
+            servidor.receba(new PedidoDeValidacaoEmail(empresaDTO.getEmail()));
             do{
                 comunicado = servidor.espie();
             }while(!(comunicado instanceof Validado));
