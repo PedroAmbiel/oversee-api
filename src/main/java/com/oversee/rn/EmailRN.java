@@ -2,11 +2,15 @@ package com.oversee.rn;
 
 import com.oversee.entity.Prestador;
 import com.oversee.entity.RedefinicaoDeSenha;
+import com.oversee.exception.RegraDeNegocioException;
 import io.quarkus.mailer.Mail;
 import io.quarkus.mailer.Mailer;
+import io.quarkus.panache.common.Parameters;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
+
+import java.util.Optional;
 
 @ApplicationScoped
 public class EmailRN {
@@ -32,10 +36,38 @@ public class EmailRN {
         }
     }
 
+    public Prestador buscarIdentificadorSenha(String identificador){
+        String hql = "SELECT p FROM RedefinicaoDeSenha r " +
+                "JOIN r.prestador p " +
+                "WHERE r.identificador = :IDENTIFICADOR " +
+                "AND r.ativo = true " +
+                "ORDER BY r.id DESC " +
+                "LIMIT 1 ";
+
+        Optional<Prestador> prestador = Prestador.find(hql, Parameters.with("IDENTIFICADOR", identificador)).singleResultOptional();
+
+        return prestador.orElse(null);
+    }
+
+    @Transactional
+    public void finalizarPedidoRedefinicaoSenha(String identificador) throws RegraDeNegocioException {
+        String hql = "FROM RedefinicaoDeSenha WHERE identificador = :IDENTIFICADOR";
+
+        Optional<RedefinicaoDeSenha> redefinicao = RedefinicaoDeSenha.find(hql, Parameters.with("IDENTIFICADOR", identificador)).singleResultOptional();
+
+        if(redefinicao.isPresent()){
+            redefinicao.get().setAtivo(false);
+            redefinicao.get().persistAndFlush();
+        }else{
+            throw new RegraDeNegocioException("Não foi possivel finalizar o pedido de senha!");
+        }
+
+    }
+
     public void enviarEmailRedefinicaoSenha(RedefinicaoDeSenha pedido){
         mail.send(Mail.withText(pedido.getPrestador().getEmail(),
                 "Oversee - Redefinição de Senha",
-                "Acesse o link para redefinir a senha http://localhost:8080/redefinir-senha?identificador="+pedido.getIdentificador()));
+                "Acesse o link para redefinir a senha http://localhost:3000/trocar-senha?identificador="+pedido.getIdentificador()));
 
     }
 

@@ -1,5 +1,6 @@
 package com.oversee.rn;
 
+import com.oversee.dto.AlterarSenhaDTO;
 import com.oversee.dto.LoginDTO;
 import com.oversee.dto.PrestadorDTO;
 import com.oversee.entity.Prestador;
@@ -7,8 +8,6 @@ import com.oversee.exception.RegraDeNegocioException;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import io.quarkus.panache.common.Parameters;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
-import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 
 import java.util.Optional;
@@ -73,5 +72,16 @@ public class PrestadorRN {
         String hql = "SELECT p FROM Prestador p WHERE p.cpf = :cpf";
 
         return Prestador.find(hql, Parameters.with("cpf", cpf)).count() != 0;
+    }
+
+    @Transactional
+    public void alterarSenhaPrestador(AlterarSenhaDTO alterarSenhaDTO) throws RegraDeNegocioException {
+        Prestador prestador = this.buscarPrestador(alterarSenhaDTO.getId().longValue());
+        if(prestador != null){
+            prestador.setSenha(alterarSenhaDTO.getNovaSenha());
+            prestador.persist();
+        }else{
+            throw new RegraDeNegocioException("Prestador não encontrado");
+        }
     }
 }

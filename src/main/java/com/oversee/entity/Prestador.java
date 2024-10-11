@@ -42,7 +42,7 @@ public class Prestador extends PanacheEntity {
         this.email = email;
         this.telefone = telefone;
         this.sobrenome = sobrenome;
-        this.senha = BcryptUtil.bcryptHash(senha);
+        this.setSenha(senha);
         this.dataNascimento = dataNascimento;
     }
 
@@ -107,7 +107,7 @@ public class Prestador extends PanacheEntity {
     }
 
     public void setSenha(String senha) {
-        this.senha = senha;
+        this.senha = BcryptUtil.bcryptHash(senha);
     }
 
 }

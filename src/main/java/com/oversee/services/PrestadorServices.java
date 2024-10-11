@@ -4,7 +4,6 @@ import com.oversee.client.*;
 import com.oversee.dto.EmpresaDTO;
 import com.oversee.dto.LoginDTO;
 import com.oversee.dto.PrestadorDTO;
-import com.oversee.exception.RegraDeNegocioException;
 import com.oversee.rn.EmpresaRN;
 import com.oversee.rn.PrestadorRN;
 import jakarta.inject.Inject;
@@ -42,7 +41,7 @@ public class PrestadorServices {
             if(!resultadoLogin.isValidado()) return Response.status(Response.Status.BAD_REQUEST).entity(resultadoLogin.getMensagem()).build();
             servidor.adeus();//Finaliza conexão com o servidor
         }else{
-            return Response.status(Response.Status.BAD_REQUEST).entity("Servidor indisponível, tente mais tarde").build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Servidor indisponível, tente mais tarde").build();
         }
 
         Long idNovoPrestador = prestadorRN.criarNovoPrestador(dto);
