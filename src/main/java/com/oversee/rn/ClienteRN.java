@@ -23,7 +23,8 @@ public class ClienteRN {
                 cliente.getDataNascimento(),
                 cliente.getCpf(),
                 cliente.getRg(),
-                Prestador.findById(cliente.getFkPrestador()));
+                Prestador.findById(cliente.getFkPrestador()),
+                cliente.getDataCadastro());
 
         //Caso o cliente ja esteja cadastrado para o prestador solicitante
         if(verificarClientePrestadorJaCadastrado(novoCliente)){

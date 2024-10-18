@@ -24,10 +24,12 @@ public class Cliente extends PanacheEntity {
     @JoinColumn(name = "fk_prestador", nullable = false)
     private Prestador prestador;
 
+    @Column(name = "data_cadastro")
+    private LocalDate dataCadastro;
+
     public Cliente() {
 
     }
-
 
     private int getAnos(){
         int idade = 0;
@@ -40,12 +42,13 @@ public class Cliente extends PanacheEntity {
     }
 
 
-    public Cliente(String nome, LocalDate dataNascimento, String cpf, String rg, Prestador prestador) {
+    public Cliente(String nome, LocalDate dataNascimento, String cpf, String rg, Prestador prestador, LocalDate dataCadastro) {
         this.nome = nome;
         this.dataNascimento = dataNascimento;
         this.cpf = cpf;
         this.rg = rg;
         this.prestador = prestador;
+        this.dataCadastro = dataCadastro;
     }
 
     public Long getId() {
@@ -90,5 +93,13 @@ public class Cliente extends PanacheEntity {
 
     public void setPrestador(Prestador prestador) {
         this.prestador = prestador;
+    }
+
+    public LocalDate getDataCadastro() {
+        return dataCadastro;
+    }
+
+    public void setDataCadastro(LocalDate dataCadastro) {
+        this.dataCadastro = dataCadastro;
     }
 }

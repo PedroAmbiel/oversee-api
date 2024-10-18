@@ -45,7 +45,6 @@ public class ClientServices {
 
     @POST
     @Path("/novo")
-    @Produces
     public Response criarNovoCliente(ClienteDTO cliente) throws Exception {
         Parceiro servidor = Cliente.iniciarConexao();
 
@@ -86,7 +85,6 @@ public class ClientServices {
 
     @GET
     @Path("/buscartodos")
-    @Produces
     public Response buscarTodosClientesPrestador(@QueryParam("idPrestador") Integer idPrestador){
         List<ClienteTodos> clientes = clienteRN.buscarTodosClientes(idPrestador);
         return Response.ok(clientes).build();

@@ -51,7 +51,7 @@ public class EmailRN {
 
     @Transactional
     public void finalizarPedidoRedefinicaoSenha(String identificador) throws RegraDeNegocioException {
-        String hql = "FROM RedefinicaoDeSenha WHERE identificador = :IDENTIFICADOR";
+        String hql = "FROM RedefinicaoDeSenha WHERE identificador = :IDENTIFICADOR AND ativo = TRUE";
 
         Optional<RedefinicaoDeSenha> redefinicao = RedefinicaoDeSenha.find(hql, Parameters.with("IDENTIFICADOR", identificador)).singleResultOptional();
 

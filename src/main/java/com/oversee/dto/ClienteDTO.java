@@ -13,6 +13,7 @@ public class ClienteDTO {
     private String rg;
     private String cpf;
     private Integer fkPrestador;
+    private LocalDate dataCadastro;
 
     public ClienteDTO(Cliente cliente){
         this.id = cliente.getId().intValue();
@@ -21,6 +22,7 @@ public class ClienteDTO {
         this.rg = cliente.getRg();
         this.cpf = cliente.getCpf();
         this.fkPrestador = cliente.getPrestador().getId().intValue();
+        this.dataCadastro = cliente.getDataCadastro();
     }
 
 //    public ClienteDTO(LocalDate dataNascimento, String nome, String rg, String cpf, @ProjectedFieldName("p.id") Integer fkPrestador) {
@@ -81,5 +83,13 @@ public class ClienteDTO {
 
     public void setFkPrestador(Integer fkPrestador) {
         this.fkPrestador = fkPrestador;
+    }
+
+    public LocalDate getDataCadastro() {
+        return dataCadastro;
+    }
+
+    public void setDataCadastro(LocalDate dataCadastro) {
+        this.dataCadastro = dataCadastro;
     }
 }
