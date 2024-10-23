@@ -20,7 +20,11 @@ public class AgendamentoDTO implements Serializable {
 
     private TipoAgendamento tipoAgendamento;
 
-    public AgendamentoDTO(long id, String descricao, Integer fkPrestador, Integer fkCliente, LocalDateTime dataInicio, LocalDateTime dataFim, TipoAgendamento tipoAgendamento) {
+    private Boolean cancelado;
+
+    private String titulo;
+
+    public AgendamentoDTO(long id, String descricao, Integer fkPrestador, Integer fkCliente, LocalDateTime dataInicio, LocalDateTime dataFim, TipoAgendamento tipoAgendamento, Boolean cancelado, String titulo) {
         this.id = id;
         this.descricao = descricao;
         this.fkPrestador = fkPrestador;
@@ -28,6 +32,8 @@ public class AgendamentoDTO implements Serializable {
         this.dataInicio = dataInicio;
         this.dataFim = dataFim;
         this.tipoAgendamento = tipoAgendamento;
+        this.cancelado = cancelado;
+        this.titulo = titulo;
     }
 
     public AgendamentoDTO(Agendamento agendamento) {
@@ -38,6 +44,8 @@ public class AgendamentoDTO implements Serializable {
         this.tipoAgendamento = agendamento.getTipoAgendamento();
         this.fkCliente = agendamento.getCliente().getId().intValue();
         this.fkPrestador = agendamento.getPrestador().getId().intValue();
+        this.cancelado = agendamento.getCancelado();
+        this.titulo = agendamento.getTitulo();
     }
 
     public String getDescricao() {
@@ -94,5 +102,21 @@ public class AgendamentoDTO implements Serializable {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public Boolean getCancelado() {
+        return cancelado;
+    }
+
+    public void setCancelado(Boolean cancelado) {
+        this.cancelado = cancelado;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
     }
 }

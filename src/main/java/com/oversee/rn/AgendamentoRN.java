@@ -14,6 +14,8 @@ import jakarta.transaction.Transactional;
 import org.hibernate.NonUniqueResultException;
 import org.hibernate.PropertyValueException;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,13 +24,17 @@ public class AgendamentoRN {
 
     @Transactional
     public Boolean criarNovoAgendamento(AgendamentoDTO agendamento) throws RegraDeNegocioException {
+        if(agendamento.getDataFim().isBefore(agendamento.getDataInicio())) throw new RegraDeNegocioException("Horario fim deve ser maior que horario inicio!");
+        if(agendamento.getDataFim().equals(agendamento.getDataInicio())) throw new RegraDeNegocioException("Horario inicio deve ser diferente que horario fim!");
         Agendamento novoAgendamento = new Agendamento(
                 agendamento.getDataInicio(),
                 agendamento.getDataFim(),
                 Prestador.findById(agendamento.getFkPrestador()),
                 Cliente.findById(agendamento.getFkCliente()),
                 agendamento.getDescricao(),
-                agendamento.getTipoAgendamento());
+                agendamento.getTipoAgendamento(),
+                agendamento.getCancelado(),
+                agendamento.getTitulo());
 
         try {
             if(!verificarHorarioExisteAgendamento(novoAgendamento)) {
@@ -77,23 +83,51 @@ public class AgendamentoRN {
         return Agendamento.find(hql, Parameters.with("IDPRESTADOR", idPrestador)).project(AgendamentoTodos.class).list();
     }
 
+    public List<AgendamentoTodos> buscarAgendamentosPrestadorLimite(Integer idPrestador, LocalDateTime dataInicio, LocalDateTime dataFIm){
+        String hql = "FROM Agendamento a " +
+                "JOIN a.prestador p " +
+                "JOIN a.cliente c " +
+                "WHERE p.id = :IDPRESTADOR " +
+                "AND a.dataInicio BETWEEN :DATAINICIO AND :DATAFIM ";
+
+        return Agendamento.find(hql, Parameters.with("IDPRESTADOR", idPrestador)
+                .and("DATAINICIO", dataInicio)
+                .and("DATAFIM", dataFIm)
+        ).project(AgendamentoTodos.class).list();
+    }
+
 
     public Boolean verificarHorarioExisteAgendamento(Agendamento agendamento){
         String hql = "SELECT a " +
                 "FROM Agendamento a " +
                 "WHERE a.prestador = :PRESTADOR " +
                 "AND (a.dataInicio BETWEEN :HORARIO1 AND :HORARIO2 " +
-                "OR a.dataFim BETWEEN :HORARIO1 AND :HORARIO2) " +
-                "AND a.tipoAgendamento = :TIPOAGENDAMENTO";
+                "OR a.dataFim BETWEEN :HORARIO1 AND :HORARIO2) ";
 
 
         Optional<Agendamento> agenda = Agendamento.find(hql,
                 Parameters.with("PRESTADOR", agendamento.getPrestador())
                             .and("HORARIO1", agendamento.getDataInicio())
                             .and("HORARIO2", agendamento.getDataFim())
-                            .and("TIPOAGENDAMENTO", agendamento.getTipoAgendamento())
                             ).singleResultOptional();
 
         return agenda.isPresent();
+    }
+
+    @Transactional
+    public Boolean cancelarAgendamento(Integer idAgendamento) throws RegraDeNegocioException {
+        String hql = "SELECT a " +
+                "FROM Agendamento a " +
+                "WHERE a.id = :IDAGENDAMENTO ";
+
+        Optional<Agendamento> agendamento = Agendamento.find(hql, Parameters.with("IDAGENDAMENTO", idAgendamento)).singleResultOptional();
+
+        if(agendamento.isPresent()){
+            agendamento.get().setCancelado(true);
+            agendamento.get().persistAndFlush();
+            return true;
+        }else{
+            throw new RegraDeNegocioException("Agendamento não encontrado");
+        }
     }
 }

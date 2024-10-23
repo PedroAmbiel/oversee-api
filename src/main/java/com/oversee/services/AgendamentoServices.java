@@ -1,11 +1,14 @@
 package com.oversee.services;
 
 import com.oversee.dto.AgendamentoDTO;
+import com.oversee.dto.AgendamentoLimiteConsumesDTO;
 import com.oversee.exception.RegraDeNegocioException;
 import com.oversee.rn.AgendamentoRN;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
+
+import java.time.LocalDate;
 
 @Path("/agendamento")
 public class AgendamentoServices {
@@ -14,7 +17,6 @@ public class AgendamentoServices {
     AgendamentoRN agendamentoRN;
 
     @POST
-    @Consumes
     @Path("/novo")
     public Response cadastrarNovoAgendamento(AgendamentoDTO agendamento) {
         try {
@@ -29,7 +31,6 @@ public class AgendamentoServices {
     }
 
     @GET
-    @Produces
     @Path("/buscar")
     public Response buscarAgendamentos(@QueryParam("idAgendamento") Integer idAgendamento) {
         try{
@@ -42,21 +43,36 @@ public class AgendamentoServices {
         } catch (RegraDeNegocioException e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
         }
-
     }
 
+    //Busca TODOS os agendamentos por cliente
     @GET
-    @Produces
     @Path("/buscarcliente")
     public Response buscarAgendamentosPorCliente(@QueryParam("idCliente") Integer idCliente, @QueryParam("idPrestador") Integer idPrestador) {
         return Response.ok(agendamentoRN.buscarAgendamentosCliente(idCliente, idPrestador)).build();
     }
 
+    //Busca TODOS os agendamentos por prestador sem limite
     @GET
-    @Produces
     @Path("/buscarprestador")
     public Response buscarAgendamentosPorPrestador(@QueryParam("idPrestador") Integer idPrestador) {
         return Response.ok(agendamentoRN.buscarAgendamentosPrestador(idPrestador)).build();
     }
 
+    //Busca agendamentos do prestador com limite de data inicio e data fim
+    @POST
+    @Path("/buscarprestadorlimite")
+    public Response buscarAgendamentosPorPrestadorLimite(@QueryParam("idPrestador") Integer idPrestador, AgendamentoLimiteConsumesDTO agendamento) {
+        return Response.ok(agendamentoRN.buscarAgendamentosPrestadorLimite(idPrestador, agendamento.getDataInicio(), agendamento.getDataFim())).build();
+    }
+
+    @PUT
+    @Path("/cancelar")
+    public Response cancelarAgendamento(@QueryParam("idAgendamento") Integer idAgendamento) {
+        try{
+            return Response.ok(agendamentoRN.cancelarAgendamento(idAgendamento)).build();
+        }catch (RegraDeNegocioException e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+        }
+    }
 }

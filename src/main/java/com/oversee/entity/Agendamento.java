@@ -31,14 +31,22 @@ public class Agendamento extends PanacheEntity {
     @Enumerated(EnumType.STRING)
     private TipoAgendamento tipoAgendamento;
 
+    @Column(name = "cancelado")
+    private Boolean cancelado;
 
-    public Agendamento(LocalDateTime dataInicio, LocalDateTime dataFim, Prestador fkPrestador, Cliente cliente, String descricao, TipoAgendamento tipoAgendamento) {
+    @Column(name = "titulo")
+    private String titulo;
+
+
+    public Agendamento(LocalDateTime dataInicio, LocalDateTime dataFim, Prestador fkPrestador, Cliente cliente, String descricao, TipoAgendamento tipoAgendamento, Boolean cancelado, String titulo) {
         this.dataInicio = dataInicio;
         this.dataFim = dataFim;
         this.cliente = cliente;
         this.descricao = descricao;
         this.prestador = fkPrestador;
         this.tipoAgendamento = tipoAgendamento;
+        this.cancelado = cancelado;
+        this.titulo = titulo;
     }
 
     public Agendamento() {}
@@ -90,5 +98,21 @@ public class Agendamento extends PanacheEntity {
 
     public void setTipoAgendamento(TipoAgendamento tipoAgendamento) {
         this.tipoAgendamento = tipoAgendamento;
+    }
+
+    public Boolean getCancelado() {
+        return cancelado;
+    }
+
+    public void setCancelado(Boolean cancelado) {
+        this.cancelado = cancelado;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
     }
 }
