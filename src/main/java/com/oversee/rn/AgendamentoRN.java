@@ -69,7 +69,8 @@ public class AgendamentoRN {
                 "JOIN a.prestador p " +
                 "JOIN a.cliente c " +
                 "WHERE c.id = :IDCLIENTE " +
-                "AND p.id = :IDPRESTADOR ";
+                "AND p.id = :IDPRESTADOR " +
+                "AND a.cancelado = false ";
 
         return Agendamento.find(hql, Parameters.with("IDCLIENTE", idCliente).and("IDPRESTADOR", idPrestador)).project(AgendamentoTodos.class).list();
     }

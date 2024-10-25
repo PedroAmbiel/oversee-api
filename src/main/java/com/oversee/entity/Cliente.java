@@ -3,6 +3,7 @@ package com.oversee.entity;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "clientes", schema = "oversee")
@@ -27,6 +28,12 @@ public class Cliente extends PanacheEntity {
     @Column(name = "data_cadastro")
     private LocalDate dataCadastro;
 
+    @Column(name = "cancelado")
+    private Boolean cancelado;
+
+    @Column(name = "data_cancelado")
+    private LocalDateTime dataCancelado;
+
     public Cliente() {
 
     }
@@ -50,6 +57,18 @@ public class Cliente extends PanacheEntity {
         this.prestador = prestador;
         this.dataCadastro = dataCadastro;
     }
+
+    public Cliente(String nome, LocalDate dataNascimento, String cpf, String rg, Prestador prestador, LocalDate dataCadastro, Boolean cancelado, LocalDateTime dataCancelado) {
+        this.nome = nome;
+        this.dataNascimento = dataNascimento;
+        this.cpf = cpf;
+        this.rg = rg;
+        this.prestador = prestador;
+        this.dataCadastro = dataCadastro;
+        this.cancelado = cancelado;
+        this.dataCancelado = dataCancelado;
+    }
+
 
     public Long getId() {
         return id;
@@ -101,5 +120,21 @@ public class Cliente extends PanacheEntity {
 
     public void setDataCadastro(LocalDate dataCadastro) {
         this.dataCadastro = dataCadastro;
+    }
+
+    public Boolean getCancelado() {
+        return cancelado;
+    }
+
+    public void setCancelado(Boolean cancelado) {
+        this.cancelado = cancelado;
+    }
+
+    public LocalDateTime getDataCancelado() {
+        return dataCancelado;
+    }
+
+    public void setDataCancelado(LocalDateTime dataCancelado) {
+        this.dataCancelado = dataCancelado;
     }
 }

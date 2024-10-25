@@ -1,5 +1,6 @@
 package com.oversee.rn;
 
+import com.oversee.dto.AtualizarClienteDTO;
 import com.oversee.dto.ClienteDTO;
 import com.oversee.exception.RegraDeNegocioException;
 import com.oversee.record.ClienteTodos;
@@ -10,6 +11,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import org.hibernate.PropertyValueException;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,7 +26,9 @@ public class ClienteRN {
                 cliente.getCpf(),
                 cliente.getRg(),
                 Prestador.findById(cliente.getFkPrestador()),
-                cliente.getDataCadastro());
+                cliente.getDataCadastro(),
+                cliente.getCancelado(),
+                cliente.getDataCancelado());
 
         //Caso o cliente ja esteja cadastrado para o prestador solicitante
         if(verificarClientePrestadorJaCadastrado(novoCliente)){
@@ -65,7 +69,8 @@ public class ClienteRN {
     public List<ClienteTodos> buscarTodosClientes(Integer idPrestador){
         String hql = "FROM Cliente c " +
                 "JOIN c.prestador p " +
-                "WHERE p.id = :IDPRESTADOR ";
+                "WHERE p.id = :IDPRESTADOR " +
+                "AND c.cancelado = false";
 
         return Cliente.find(hql, Parameters.with("IDPRESTADOR", idPrestador)).project(ClienteTodos.class).list();
     }
@@ -82,5 +87,33 @@ public class ClienteRN {
 
 
         return result.isPresent();
+    }
+
+    @Transactional
+    public Boolean cancelarCliente(Integer idCliente){
+        Cliente cliente = Cliente.findById(idCliente.longValue());
+
+        if(cliente != null){
+            cliente.setDataCancelado(LocalDateTime.now());
+            cliente.setCancelado(true);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    @Transactional
+    public Boolean atualizarCliente(AtualizarClienteDTO clienteDTO) throws RegraDeNegocioException{
+        Cliente cliente = Cliente.findById(clienteDTO.getId().longValue());
+        if(cliente != null) {
+            cliente.setNome(clienteDTO.getNome());
+            cliente.setDataNascimento(clienteDTO.getDataNascimento());
+            cliente.persistAndFlush();
+            return true;
+        }else{
+            throw new RegraDeNegocioException("Cliente não encontrado");
+        }
+
     }
 }

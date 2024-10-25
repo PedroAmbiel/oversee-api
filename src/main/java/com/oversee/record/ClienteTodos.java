@@ -10,6 +10,7 @@ public record ClienteTodos(@ProjectedFieldName("c.id") Long id,
                            String rg,
                            @ProjectedFieldName("c.cpf") String cpf,
                            @ProjectedFieldName("p.id") Long fkPrestador,
-                           @ProjectedFieldName("c.dataCadastro") LocalDate dataCadastro){
+                           @ProjectedFieldName("c.dataCadastro") LocalDate dataCadastro,
+                           @ProjectedFieldName("c.cancelado")Boolean cancelado){
 
 }

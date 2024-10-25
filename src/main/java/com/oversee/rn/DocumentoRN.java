@@ -43,9 +43,9 @@ public class DocumentoRN {
         String hql = "FROM Documento WHERE prestador.id = :IDPRESTADOR AND suspenso = false";
 
         List<DocumentoTodos> documentos;
-        try{
+        try {
             documentos = Documento.find(hql, Parameters.with("IDPRESTADOR", idPrestador)).project(DocumentoTodos.class).list();
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e);
             throw new RegraDeNegocioException("Não foi possível consultar os documentos");
         }

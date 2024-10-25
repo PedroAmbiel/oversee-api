@@ -4,6 +4,7 @@ import com.oversee.entity.Cliente;
 import io.quarkus.hibernate.orm.panache.common.ProjectedFieldName;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class ClienteDTO {
 
@@ -14,6 +15,8 @@ public class ClienteDTO {
     private String cpf;
     private Integer fkPrestador;
     private LocalDate dataCadastro;
+    private Boolean cancelado;
+    private LocalDateTime dataCancelado;
 
     public ClienteDTO(Cliente cliente){
         this.id = cliente.getId().intValue();
@@ -23,6 +26,8 @@ public class ClienteDTO {
         this.cpf = cliente.getCpf();
         this.fkPrestador = cliente.getPrestador().getId().intValue();
         this.dataCadastro = cliente.getDataCadastro();
+        this.cancelado = cliente.getCancelado();
+        this.dataCancelado = cliente.getDataCancelado();
     }
 
 //    public ClienteDTO(LocalDate dataNascimento, String nome, String rg, String cpf, @ProjectedFieldName("p.id") Integer fkPrestador) {
@@ -91,5 +96,21 @@ public class ClienteDTO {
 
     public void setDataCadastro(LocalDate dataCadastro) {
         this.dataCadastro = dataCadastro;
+    }
+
+    public Boolean getCancelado() {
+        return cancelado;
+    }
+
+    public void setCancelado(Boolean cancelado) {
+        this.cancelado = cancelado;
+    }
+
+    public LocalDateTime getDataCancelado() {
+        return dataCancelado;
+    }
+
+    public void setDataCancelado(LocalDateTime dataCancelado) {
+        this.dataCancelado = dataCancelado;
     }
 }

@@ -47,7 +47,7 @@ public class AgendamentoServices {
 
     //Busca TODOS os agendamentos por cliente
     @GET
-    @Path("/buscarcliente")
+    @Path("/buscarporcliente")
     public Response buscarAgendamentosPorCliente(@QueryParam("idCliente") Integer idCliente, @QueryParam("idPrestador") Integer idPrestador) {
         return Response.ok(agendamentoRN.buscarAgendamentosCliente(idCliente, idPrestador)).build();
     }

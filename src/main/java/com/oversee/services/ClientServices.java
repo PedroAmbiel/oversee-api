@@ -2,6 +2,7 @@ package com.oversee.services;
 
 
 import com.oversee.client.*;
+import com.oversee.dto.AtualizarClienteDTO;
 import com.oversee.dto.ClienteDTO;
 import com.oversee.exception.RegraDeNegocioException;
 import com.oversee.record.ClienteTodos;
@@ -89,4 +90,30 @@ public class ClientServices {
         List<ClienteTodos> clientes = clienteRN.buscarTodosClientes(idPrestador);
         return Response.ok(clientes).build();
     }
+
+    @PUT
+    @Path("/cancelar")
+    public Response cancelarCliente(@QueryParam("idCliente") Integer idCliente){
+        if(clienteRN.cancelarCliente(idCliente)){
+            return Response.ok("Cliente cancelado com sucesso!").build();
+        }else{
+            return Response.status(Response.Status.BAD_REQUEST).entity("Não foi possivel cancelar cliente").build();
+        }
+    }
+
+    @PUT
+    @Path("/atualizar")
+    public Response atualizarCliente(AtualizarClienteDTO atualizarClienteDTO){
+        try{
+            if(clienteRN.atualizarCliente(atualizarClienteDTO)){
+                return Response.ok("Cliente atualizado com sucesso!").build();
+            }else {
+                return Response.status(Response.Status.BAD_REQUEST).build();
+            }
+        }catch(RegraDeNegocioException e){
+            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+        }
+
+    }
+
 }
