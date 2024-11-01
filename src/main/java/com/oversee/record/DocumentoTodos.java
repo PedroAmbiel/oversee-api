@@ -14,7 +14,8 @@ public record DocumentoTodos(@ProjectedFieldName("id") Long id,
                              @ProjectedFieldName("documento") Byte[] documento,
                              @ProjectedFieldName("tipoDocumento") TipoDocumento tipoDocumento,
                              @ProjectedFieldName("nomeArquivo") String nomeArquivo,
-                             @ProjectedFieldName("extensaoDocumento")String extensaoDocumento) {
+                             @ProjectedFieldName("extensaoDocumento")String extensaoDocumento,
+                             @ProjectedFieldName("valorDocumento")String valorDocumento) {
 
 
 

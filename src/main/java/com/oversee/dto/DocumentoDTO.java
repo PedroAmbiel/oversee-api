@@ -17,6 +17,7 @@ public class DocumentoDTO {
     private TipoDocumento tipoDocumento;
     private String nomeArquivo;
     private String extensaoDocumento;
+    private String valorDocumento;
 
     public DocumentoDTO() {}
 
@@ -29,6 +30,7 @@ public class DocumentoDTO {
         this.suspenso = documento.getSuspenso();
         this.dataSuspenso = documento.getDataSuspensao();
         this.tipoDocumento = documento.getTipoDocumento();
+        this.valorDocumento = documento.getValorDocumento();
     }
 
     public DocumentoDTO(Integer id,
@@ -40,7 +42,8 @@ public class DocumentoDTO {
                         LocalDateTime dataSuspenso,
                         TipoDocumento tipoDocumento,
                         String nomeArquivo,
-                        String extensaoDocumento) {
+                        String extensaoDocumento,
+                        String valorDocumento) {
         this.id = id;
         this.documento = documento;
         this.idCliente = idCliente;
@@ -51,6 +54,7 @@ public class DocumentoDTO {
         this.tipoDocumento = tipoDocumento;
         this.nomeArquivo = nomeArquivo;
         this.extensaoDocumento = extensaoDocumento;
+        this.valorDocumento = valorDocumento;
     }
 
 
@@ -132,5 +136,13 @@ public class DocumentoDTO {
 
     public void setExtensaoDocumento(String extensaoDocumento) {
         this.extensaoDocumento = extensaoDocumento;
+    }
+
+    public String getValorDocumento() {
+        return valorDocumento;
+    }
+
+    public void setValorDocumento(String valorDocumento) {
+        this.valorDocumento = valorDocumento;
     }
 }

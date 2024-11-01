@@ -43,11 +43,14 @@ public class Documento extends PanacheEntity {
     @Column(name = "extensao_documento")
     private String extensaoDocumento;
 
+    @Column(name = "valor_documento")
+    private String valorDocumento;
+
     public Documento() {
 
     }
 
-    public Documento(Cliente cliente, Boolean suspenso, Prestador prestador, Byte[] documento, String nomeArquivo, TipoDocumento tipoDocumento, String extensaoDocumento) {
+    public Documento(Cliente cliente, Boolean suspenso, Prestador prestador, Byte[] documento, String nomeArquivo, TipoDocumento tipoDocumento, String extensaoDocumento, String valorDocumento) {
         this.cliente = cliente;
         this.dataCadastro = LocalDateTime.now();
         this.suspenso = suspenso;
@@ -56,6 +59,7 @@ public class Documento extends PanacheEntity {
         this.nomeArquivo = nomeArquivo;
         this.tipoDocumento = tipoDocumento;
         this.extensaoDocumento = extensaoDocumento;
+        this.valorDocumento = valorDocumento;
     }
 
     public Cliente getCliente() {
@@ -128,5 +132,13 @@ public class Documento extends PanacheEntity {
 
     public void setExtensaoDocumento(String extensaoDocumento) {
         this.extensaoDocumento = extensaoDocumento;
+    }
+
+    public String getValorDocumento() {
+        return valorDocumento;
+    }
+
+    public void setValorDocumento(String valorDocumento) {
+        this.valorDocumento = valorDocumento;
     }
 }

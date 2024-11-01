@@ -27,7 +27,8 @@ public class DocumentoRN {
                 documentoDTO.getDocumento(),
                 documentoDTO.getNomeArquivo(),
                 documentoDTO.getTipoDocumento(),
-                documentoDTO.getExtensaoDocumento()
+                documentoDTO.getExtensaoDocumento(),
+                documentoDTO.getValorDocumento()
         );
 
         try{

@@ -7,6 +7,7 @@ public class AtualizarClienteDTO {
     private Integer id;
     private LocalDate dataNascimento;
     private String nome;
+    private byte[] fotoPerfil;
 
     public AtualizarClienteDTO(){}
 
@@ -39,5 +40,13 @@ public class AtualizarClienteDTO {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public byte[] getFotoPerfil() {
+        return fotoPerfil;
+    }
+
+    public void setFotoPerfil(byte[] fotoPerfil) {
+        this.fotoPerfil = fotoPerfil;
     }
 }
