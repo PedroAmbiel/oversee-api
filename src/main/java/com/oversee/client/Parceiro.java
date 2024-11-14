@@ -63,8 +63,8 @@ public class Parceiro
         }
         catch (Exception erro)
         {
-            System.out.println(erro);
-            throw new Exception (erro.getMessage());
+            System.out.println("Conexão finalizada");
+            throw new Exception ("Conexão finalizada");
         }
     }
 
